@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 2603376477120639073}
   - component: {fileID: 2603376477120639074}
   - component: {fileID: 2603376477120639086}
-  m_Layer: 0
-  m_Name: GridCube
-  m_TagString: GridBlock
+  m_Layer: 8
+  m_Name: GroundObject
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
