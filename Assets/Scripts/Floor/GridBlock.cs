@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+//NOT IN USE 23.04.2021
 public class GridBlock : MonoBehaviour
 {
     private Color defaultColor;

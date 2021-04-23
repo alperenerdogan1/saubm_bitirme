@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +22,7 @@ public class InventoryController : MonoBehaviour
     {
         groundManager = floorManager.GetComponent<GroundManager>();
     }
-
+    
     private void Update()
     {
         if (blueprintSelected)
@@ -39,7 +39,7 @@ public class InventoryController : MonoBehaviour
             }
         }
     }
-
+    
     public void SelectBuildingBlueprint(int id)
     {
         objectToBuilded = prefabs[id];
@@ -56,7 +56,7 @@ public class InventoryController : MonoBehaviour
         blueprintModel.GetComponentInChildren<Transform>().tag = "Blueprint";
         blueprintModel.GetComponentInChildren<BoxCollider>().enabled = false;
         buildingRenderer = blueprintModel.GetComponentInChildren<Renderer>();
-        defaultColor = buildingRenderer.material.color;
+        // defaultColor = buildingRenderer.material.color;
         //
         ChangeAlpha(buildingRenderer.material, 0.3f);
 

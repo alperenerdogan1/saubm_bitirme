@@ -32,7 +32,7 @@ public class GroundManager : MonoBehaviour
     {
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Debug.DrawRay(ray.origin, ray.direction * 1000, Color.yellow);
+        Debug.DrawRay(ray.origin, ray.direction * 9999, Color.yellow);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, buildPointRayLayerMask))
         {
             Debug.Log(hit.collider.tag);

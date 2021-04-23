@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//NOT IN USE 23.04.2021
 public class GridManager : MonoBehaviour
 {
     public int width, height;
