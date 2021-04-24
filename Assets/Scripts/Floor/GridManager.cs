@@ -29,19 +29,6 @@ public class GridManager : MonoBehaviour
         MouseTest();
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        for (float x = 0; x < height; x += size)
-        {
-            for (float z = 0; z < width; z += size)
-            {
-                var point = GetNearestPointOnGrid(new Vector3(x, 0f, z));
-                Gizmos.DrawSphere(point, 0.1f);
-            }
-        }
-    }
-
     private void CreateGridPlane()
     {
         gridCube.transform.localScale *= size;
