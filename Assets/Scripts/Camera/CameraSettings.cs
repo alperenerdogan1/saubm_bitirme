@@ -5,6 +5,10 @@ public class CameraSettings : ScriptableObject
 {
     [SerializeField] private float positionOffset;
     public float PositionOffset { get { return positionOffset; } }
+    [SerializeField] private float leftPositionOffset;
+    public float LeftPositionOffset { get { return leftPositionOffset; } }
+    [SerializeField] private float rightPositionOffset;
+    public float RightPositionOffset { get { return rightPositionOffset; } }
     [SerializeField] private float rotationOffset;
     public float RotationOffset { get { return rotationOffset; } }
     [SerializeField] private CursorLockMode cursorLockMode;

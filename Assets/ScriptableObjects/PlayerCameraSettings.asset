@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: PlayerCameraSettings
   m_EditorClassIdentifier: 
   positionOffset: 50
+  leftPositionOffset: 30
+  rightPositionOffset: 30
   rotationOffset: 0.3
   cursorLockMode: 2
   horizontalPositionSpeed: 10

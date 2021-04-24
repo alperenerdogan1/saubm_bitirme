@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
@@ -13,8 +14,8 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         Cursor.lockState = cameraSettings.CursorLockMode;
-        leftEdge = bottomEdge = 0 + cameraSettings.PositionOffset;
-        rightEdge = MasterManager.Instance.GameSettings.ScreenWidth - cameraSettings.PositionOffset;
+        leftEdge = bottomEdge = 0 + cameraSettings.LeftPositionOffset;
+        rightEdge = MasterManager.Instance.GameSettings.ScreenWidth - cameraSettings.RightPositionOffset;
         upperEdge = MasterManager.Instance.GameSettings.ScreenHeight - cameraSettings.PositionOffset;
     }
 
@@ -27,7 +28,8 @@ public class CameraController : MonoBehaviour
         }
         if (!lockCameraFlow)
         {
-            ProcessCameraZoom();
+            if (!IsMouseOverUI())
+                ProcessCameraZoom();
             ProcessCameraPosition();
         }
     }
@@ -101,5 +103,9 @@ public class CameraController : MonoBehaviour
         {
             lockCameraFlow = true;
         }
+    }
+    private bool IsMouseOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
     }
 }
