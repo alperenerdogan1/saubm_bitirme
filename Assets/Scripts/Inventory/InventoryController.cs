@@ -5,8 +5,12 @@ using UnityEngine.UI;
 
 public class InventoryController : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> prefabs;
+    public Object[] prefabs;
+    public static Object[] materials;
+    
     [SerializeField] private Text selectedText;
+    public Button buildObjectButton;
+    public LayoutGroup buildObjectButtonLayoutGorup;
     private List<GameObject> scaledPrefabs;
 
     public static bool blueprintSelected = false;
@@ -20,9 +24,12 @@ public class InventoryController : MonoBehaviour
     Renderer buildingRenderer;
     private void Start()
     {
+        materials = Resources.LoadAll("BlenderMaterials", typeof(Material));
+        SetupUI();
         groundManager = floorManager.GetComponent<GroundManager>();
+        blueprintHeight = groundManager.yLength / 2;
     }
-    
+
     private void Update()
     {
         if (blueprintSelected)
@@ -32,34 +39,24 @@ public class InventoryController : MonoBehaviour
             {
                 blueprintSelected = false;
                 Destroy(blueprintModel);
-                buildingRenderer.material.color = defaultColor;
-                float buildHeight = buildingRenderer.bounds.size.y / 2;
-                groundManager.BuildObject(objectToBuilded, GroundManager.buildPoint, buildHeight);
+                groundManager.BuildObject(objectToBuilded, GroundManager.buildPoint);
                 selectedText.text = "Selected: Nothing ";
             }
         }
     }
-    
+
     public void SelectBuildingBlueprint(int id)
     {
-        objectToBuilded = prefabs[id];
+        objectToBuilded = prefabs[id] as GameObject;
         selectedText.text = "Selected: " + prefabs[id].name;
         Renderer objectToBuildedRenderer = objectToBuilded.GetComponentInChildren<Renderer>();
         groundManager.boundSizeX = objectToBuildedRenderer.bounds.size.x / 2;
         groundManager.boundSizeY = objectToBuildedRenderer.bounds.size.z / 2;
+        objectToBuildedRenderer.material = materials[0] as Material;
 
-        blueprintHeight = (objectToBuildedRenderer.bounds.size.y / 2) + GroundManager.buildPoint.y;
         blueprintModel = Instantiate(objectToBuilded, new Vector3(0, 100, 0), Quaternion.identity);
         blueprintModel.tag = "Blueprint";
-
-        //if model is child
-        blueprintModel.GetComponentInChildren<Transform>().tag = "Blueprint";
-        blueprintModel.GetComponentInChildren<BoxCollider>().enabled = false;
         buildingRenderer = blueprintModel.GetComponentInChildren<Renderer>();
-        // defaultColor = buildingRenderer.material.color;
-        //
-        ChangeAlpha(buildingRenderer.material, 0.3f);
-
         blueprintModel.layer = 9;
         blueprintSelected = true;
     }
@@ -69,4 +66,22 @@ public class InventoryController : MonoBehaviour
         Color oldColor = material.color;
         material.color = new Color(oldColor.r, oldColor.g, oldColor.b, alphaVal);
     }
+    void SetupUI()
+    {
+        prefabs = Resources.LoadAll("BlenderModels", typeof(GameObject));
+        for (int i = 0; i < prefabs.Length; i++)
+        {
+            int localIndex = i;
+            var button = Instantiate(buildObjectButton);
+            button.transform.SetParent(buildObjectButtonLayoutGorup.transform);
+            button.GetComponentInChildren<Text>().text = prefabs[i].name;
+            button.GetComponent<Button>().onClick.AddListener(() => SelectBuildingBlueprint(localIndex));
+        }
+    }
+    //DI trying
+    void btnClicked(int index)
+    {
+        SelectBuildingBlueprint(index);
+    }
+
 }

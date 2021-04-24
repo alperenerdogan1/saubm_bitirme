@@ -6,10 +6,12 @@ public class GroundManager : MonoBehaviour
 {
     [SerializeField] private GameObject GroundObject;
     [SerializeField] public float width, height, yLength;
+    [Range(.2f, 3)]
     [SerializeField] private float size;
     public float boundSizeX, boundSizeY;
     public static Vector3 buildPoint;
     [SerializeField] private LayerMask buildPointRayLayerMask;
+
     void Start()
     {
         GameObject ground = Instantiate(GroundObject, new Vector3(width / 2, 0, height / 2), Quaternion.identity, this.transform);
@@ -35,7 +37,7 @@ public class GroundManager : MonoBehaviour
         Debug.DrawRay(ray.origin, ray.direction * 9999, Color.yellow);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, buildPointRayLayerMask))
         {
-            Debug.Log(hit.collider.tag);
+            // Debug.Log(hit.collider.tag);
             if (hit.collider.tag == "Ground")
             {
                 Vector3 appliedPoint = hit.point;
@@ -57,6 +59,7 @@ public class GroundManager : MonoBehaviour
                 }
                 appliedPoint.y = yLength;
                 buildPoint = appliedPoint;
+                // Debug.Log(appliedPoint);
             }
         }
     }
@@ -74,12 +77,25 @@ public class GroundManager : MonoBehaviour
 
         return result;
     }
-    public GameObject BuildObject(GameObject prefab, Vector3 position, float buildHeight)
+    private void OnDrawGizmos()
     {
-        position += new Vector3(0, buildHeight, 0);
+        Gizmos.color = Color.red;
+        for (float x = 0; x < height; x += size)
+        {
+            for (float z = 0; z < width; z += size)
+            {
+                var point = GetNearestPointOnGrid(new Vector3(x, 0f, z));
+                Gizmos.DrawSphere(point, 0.1f);
+            }
+        }
+    }
+    public GameObject BuildObject(GameObject prefab, Vector3 position)
+    {
+        position += new Vector3(0, -yLength / 2, 0);
         var instantiated = Instantiate(prefab, position, Quaternion.identity);
         var renderer = instantiated.GetComponentInChildren<Renderer>();
         InventoryController.ChangeAlpha(renderer.material, 1);
+        renderer.material = InventoryController.materials[Random.Range(1, 4)] as Material;
         return instantiated;
     }
 }
