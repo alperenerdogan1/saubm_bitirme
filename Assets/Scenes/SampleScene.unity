@@ -808,32 +808,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1421708675}
-  - component: {fileID: 1421708674}
   - component: {fileID: 1421708676}
   m_Layer: 0
-  m_Name: FloorManager
+  m_Name: GroundManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1421708674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1421708673}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4183ecd0b8a8d264f9ef016ad8b8a632, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  width: 20
-  height: 20
-  size: 0.392
-  baseGridCube: {fileID: 2603376477120639075, guid: d2722a797b162d94e80e74fa2f94eabc,
-    type: 3}
 --- !u!4 &1421708675
 Transform:
   m_ObjectHideFlags: 0
@@ -860,17 +842,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba56c528d7eb97e4290eeda78859b988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GroundObject: {fileID: 2603376477120639075, guid: 5b53c77038ea53646b21d4274597dd9d,
+  GroundObjectPrefab: {fileID: 2603376477120639075, guid: 5b53c77038ea53646b21d4274597dd9d,
     type: 3}
-  width: 20
-  height: 20
-  yLength: 0.2
-  size: 0.3
-  boundSizeX: 0
-  boundSizeY: 0
-  buildPointRayLayerMask:
+  groundObjectSize: {x: 10, y: 0.1, z: 10}
+  ShowBuildGizmo: 0
+  buildObjectSize: 0.2
+  buildObjectRayLayerMask:
     serializedVersion: 2
     m_Bits: 1335
+  ShowFloorGizmo: 1
+  floorTileSize: 2
+  floorTileSizeOffset: {x: 1, y: 0, z: 1}
+  floorTileRayLayerMask:
+    serializedVersion: 2
+    m_Bits: 311
+  boundSizeX: 0
+  boundSizeY: 0
+  floorTilePoint: {x: 0, y: 0, z: 0}
+  buildObjectPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &1425454866
 GameObject:
   m_ObjectHideFlags: 0
@@ -882,7 +871,7 @@ GameObject:
   - component: {fileID: 1425454867}
   - component: {fileID: 1425454868}
   m_Layer: 0
-  m_Name: InventoryController
+  m_Name: InventoryManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -919,6 +908,10 @@ MonoBehaviour:
   buildObjectButton: {fileID: 6324235794051585883, guid: cfe0c00978a2537418ba28dba218b4d2,
     type: 3}
   buildObjectButtonLayoutGorup: {fileID: 1821042303}
+  selectedObjectBoundSizeX: 0
+  selectedObjectBoundSizeY: 0
+  blueprintModel: {fileID: 0}
+  objectToBuilded: {fileID: 0}
   floorManager: {fileID: 1421708673}
 --- !u!1 &1485449014
 GameObject:
