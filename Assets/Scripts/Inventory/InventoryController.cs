@@ -3,43 +3,47 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class InventoryController : MonoBehaviour
 {
+    public enum SelectedObjectType { Nothing, Blueprint, BuildObject, FloorTile, Wall };
+    //Loading from resources
     public Object[] prefabs;
     public static Object[] materials;
-    
+    // for testing
     [SerializeField] private Text selectedText;
+    //UI
     public Button buildObjectButton;
     public LayoutGroup buildObjectButtonLayoutGorup;
-    private List<GameObject> scaledPrefabs;
-
-    public static bool blueprintSelected = false;
-    public static GameObject blueprintModel;
-    public static GameObject objectToBuilded;
-    Color blueprintColor, defaultColor;
-    float blueprintHeight;
+    // Selected object properties
+    SelectedObjectType selectedObject;
+    public float selectedObjectBoundSizeX, selectedObjectBoundSizeY;
+    public GameObject blueprintModel;
+    public GameObject objectToBuilded;
+    Renderer buildingRenderer;
+    // References for other managers
     [SerializeField]
     private GameObject floorManager;
+    //References for scripts of other managers
     private GroundManager groundManager;
-    Renderer buildingRenderer;
     private void Start()
     {
-        materials = Resources.LoadAll("BlenderMaterials", typeof(Material));
+        LoadResources();
         SetupUI();
         groundManager = floorManager.GetComponent<GroundManager>();
-        blueprintHeight = groundManager.yLength / 2;
+        selectedObject = SelectedObjectType.Nothing;
     }
 
     private void Update()
     {
-        if (blueprintSelected)
+        if (selectedObject == SelectedObjectType.Blueprint)
         {
-            blueprintModel.transform.position = GroundManager.buildPoint + new Vector3(0, blueprintHeight, 0);
+            blueprintModel.transform.position = groundManager.buildObjectPoint;
             if (Input.GetMouseButtonDown(0))
             {
-                blueprintSelected = false;
+                selectedObject = SelectedObjectType.Nothing;
                 Destroy(blueprintModel);
-                groundManager.BuildObject(objectToBuilded, GroundManager.buildPoint);
+                groundManager.BuildObject(objectToBuilded);
                 selectedText.text = "Selected: Nothing ";
             }
         }
@@ -53,22 +57,15 @@ public class InventoryController : MonoBehaviour
         groundManager.boundSizeX = objectToBuildedRenderer.bounds.size.x / 2;
         groundManager.boundSizeY = objectToBuildedRenderer.bounds.size.z / 2;
         objectToBuildedRenderer.material = materials[0] as Material;
-
         blueprintModel = Instantiate(objectToBuilded, new Vector3(0, 100, 0), Quaternion.identity);
         blueprintModel.tag = "Blueprint";
         buildingRenderer = blueprintModel.GetComponentInChildren<Renderer>();
         blueprintModel.layer = 9;
-        blueprintSelected = true;
+        selectedObject = SelectedObjectType.Blueprint;
     }
 
-    static public void ChangeAlpha(Material material, float alphaVal)
-    {
-        Color oldColor = material.color;
-        material.color = new Color(oldColor.r, oldColor.g, oldColor.b, alphaVal);
-    }
     void SetupUI()
     {
-        prefabs = Resources.LoadAll("BlenderModels", typeof(GameObject));
         for (int i = 0; i < prefabs.Length; i++)
         {
             int localIndex = i;
@@ -83,5 +80,9 @@ public class InventoryController : MonoBehaviour
     {
         SelectBuildingBlueprint(index);
     }
-
+    void LoadResources()
+    {
+        materials = Resources.LoadAll("BlenderMaterials", typeof(Material));
+        prefabs = Resources.LoadAll("BlenderModels", typeof(GameObject));
+    }
 }

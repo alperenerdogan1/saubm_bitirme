@@ -7,8 +7,6 @@ public class ScriptableGameSettings : AbstractScriptableObject
     public int ScreenWidth { get { return screenWidth; } }
     [ReadOnlyInInspector] [SerializeField] private int screenHeight;
     public int ScreenHeight { get { return screenHeight; } }
-    [SerializeField] private int gridSize;
-    public int GridSize { get { return gridSize; } }
     [Header("Layers")]
     [SerializeField] private int groundLayer;
     public int GroundLayer { get { return groundLayer; } }
