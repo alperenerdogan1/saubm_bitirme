@@ -8,9 +8,11 @@ public class GroundManager : MonoBehaviour
     [SerializeField] private GameObject GroundObjectPrefab;
     public Vector3 groundObjectSize;
     [Header("Build Objects Settings")]
+    public Vector3 buildObjectGizmosSize;
     [SerializeField] private bool ShowBuildGizmo = false;
-    [Range(.2f, 3)]
+    [Range(.05f, 3)]
     [SerializeField] private float buildObjectSize;
+    [SerializeField] private Vector3 buildObjectSizeOffset;
     [SerializeField] private LayerMask buildObjectRayLayerMask;
     [Header("Floor Objects Settings")]
     [SerializeField] private bool ShowFloorGizmo = false;
@@ -18,16 +20,17 @@ public class GroundManager : MonoBehaviour
     [SerializeField] private float floorTileSize;
     [SerializeField] private Vector3 floorTileSizeOffset;
     [SerializeField] private LayerMask floorTileRayLayerMask;
-    public float boundSizeX, boundSizeY;
+    [Header("Other")]
     // point where the ray shows for floor tile
     public Vector3 floorTilePoint;
     // point where the ray shows for build objects
-    public Vector3 buildObjectPoint;
-
+    public Vector3 buildPoint;
+    [Header("References")]
+    public InventoryController inventoryController;
     void Start()
     {
         // initializing ground game object
-        GameObject groundGameObject = Instantiate(GroundObjectPrefab, new Vector3(groundObjectSize.x / 2, 0, groundObjectSize.z / 2),
+        GameObject groundGameObject = Instantiate(GroundObjectPrefab, new Vector3(groundObjectSize.x / 2, -0.05f, groundObjectSize.z / 2),
          Quaternion.identity, this.transform);
         CustomUtility.ChangeLocalScale(groundGameObject, groundObjectSize);
         groundGameObject.layer = MasterManager.Instance.GameSettings.GroundLayer;
@@ -41,32 +44,6 @@ public class GroundManager : MonoBehaviour
             var hitpoint = GridMousePosition(hit);
         }
     }
-    Vector3 GridMousePosition(RaycastHit hit)
-    {
-        Vector3 appliedPoint = hit.point;
-        if (hit.point.x + boundSizeX > groundObjectSize.x)
-        {
-            appliedPoint.x = groundObjectSize.x - boundSizeX;
-        }
-        if (hit.point.x - boundSizeX < 0)
-        {
-            appliedPoint.x = boundSizeX;
-        }
-        if (hit.point.z + boundSizeY > groundObjectSize.z)
-        {
-            appliedPoint.z = groundObjectSize.z - boundSizeY;
-        }
-        if (hit.point.z - boundSizeY < 0)
-        {
-            appliedPoint.z = boundSizeY;
-        }
-
-        appliedPoint = GetNearestPointOnGrid(appliedPoint, floorTileSize, floorTileSizeOffset);
-        appliedPoint.y = groundObjectSize.y / 2 + .0001f;
-        buildObjectPoint = appliedPoint;
-
-        return appliedPoint;
-    }
     bool CheckRayTag(LayerMask mask, string tag, out RaycastHit hit)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -77,44 +54,80 @@ public class GroundManager : MonoBehaviour
         }
         return false;
     }
-    public Vector3 GetNearestPointOnGrid(Vector3 position, float size)
+    public Vector3 restrictedHitPoint;
+    Vector3 GridMousePosition(RaycastHit hit)
+    {
+        Vector3 appliedPoint = hit.point;
+        if (hit.point.x + inventoryController.selectedItem.halfBoundSizeX >= groundObjectSize.x)
+        {
+            appliedPoint.x = groundObjectSize.x - inventoryController.selectedItem.halfBoundSizeX;
+        }
+        if (hit.point.x - inventoryController.selectedItem.halfBoundSizeX < 0)
+        {
+            appliedPoint.x = inventoryController.selectedItem.halfBoundSizeX;
+        }
+        if (hit.point.z + inventoryController.selectedItem.halfBoundSizeY >= groundObjectSize.z)
+        {
+            appliedPoint.z = groundObjectSize.z - inventoryController.selectedItem.halfBoundSizeY;
+        }
+        if (hit.point.z - inventoryController.selectedItem.halfBoundSizeY < 0)
+        {
+            appliedPoint.z = inventoryController.selectedItem.halfBoundSizeY;
+        }
+        restrictedHitPoint = appliedPoint;
+        switch (inventoryController.gridSizeOptions)
+        {
+            case InventoryController.GridSizeOptions.floorBased:
+                appliedPoint = GetNearestPointOnGrid(appliedPoint, floorTileSize, floorTileSizeOffset);
+                break;
+            case InventoryController.GridSizeOptions.buildObjectBased:
+                appliedPoint = GetNearestPointOnGrid(appliedPoint, buildObjectSize);
+                break;
+            default:
+                break;
+        }
+        appliedPoint.y = groundObjectSize.y / 2 + .0001f;
+        buildPoint = appliedPoint;
+
+        return appliedPoint;
+    }
+    public Vector3 GetNearestPointOnGrid(Vector3 position, float size, bool showLogs = true)
     {
         position -= transform.position;
-
         int x = Mathf.RoundToInt(position.x / size);
         int y = Mathf.RoundToInt(position.y / size);
         int z = Mathf.RoundToInt(position.z / size);
-
         Vector3 result = new Vector3((float)x * size, (float)y * size, (float)z * size);
         result += transform.position;
-
         return result;
     }
-    public Vector3 GetNearestPointOnGrid(Vector3 position, float size, Vector3 offset)
+    public Vector3 GetNearestPointOnGrid(Vector3 position, float size, Vector3 offset, bool showLogs = true)
     {
         position -= transform.position;
-
-        int x = Mathf.RoundToInt(position.x / size);
-        int y = Mathf.RoundToInt(position.y / size);
-        int z = Mathf.RoundToInt(position.z / size);
-
-        Vector3 result = new Vector3((float)x * size, (float)y * size, (float)z * size);
+        float x = Mathf.Floor(position.x / size);
+        float y = Mathf.Floor(position.y / size);
+        float z = Mathf.Floor(position.z / size);
+        Vector3 result = new Vector3(x * size, y * size, z * size);
+        result += transform.position;
         result += offset;
-        result += transform.position;
-
         return result;
     }
+
     private void OnDrawGizmos()
     {
+        Gizmos.color = Color.black;
+        Gizmos.DrawSphere(restrictedHitPoint, .008f);
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawSphere(buildPoint, .08f);
         Gizmos.color = Color.red;
         if (ShowBuildGizmo)
         {
-            for (float x = 0; x < groundObjectSize.z; x += buildObjectSize)
+            for (float x = 0; x < buildObjectGizmosSize.z - buildObjectSizeOffset.z; x += buildObjectSize)
             {
-                for (float z = 0; z < groundObjectSize.x; z += buildObjectSize)
+                for (float z = 0; z < buildObjectGizmosSize.x - buildObjectSizeOffset.x; z += buildObjectSize)
                 {
-                    var point = GetNearestPointOnGrid(new Vector3(x, 0f, z), buildObjectSize);
-                    Gizmos.DrawSphere(point, 0.05f);
+                    Vector3 point = GetNearestPointOnGrid(new Vector3(x, 0f, z), buildObjectSize, showLogs: false);
+                    Gizmos.DrawSphere(point, 0.005f);
                 }
             }
         }
@@ -124,18 +137,12 @@ public class GroundManager : MonoBehaviour
             {
                 for (float z = 0; z < groundObjectSize.x; z += floorTileSize)
                 {
-                    var point = GetNearestPointOnGrid(new Vector3(x, 0f, z), floorTileSize, floorTileSizeOffset);
+                    Vector3 point = GetNearestPointOnGrid(new Vector3(x, 0f, z), floorTileSize, floorTileSizeOffset, showLogs: false);
                     Gizmos.DrawSphere(point, 0.05f);
                 }
             }
         }
     }
-    public GameObject BuildObject(GameObject prefab)
-    {
-        var instantiated = Instantiate(prefab, buildObjectPoint, Quaternion.identity);
-        var renderer = instantiated.GetComponentInChildren<Renderer>();
-        CustomUtility.ChangeAlpha(renderer.material, 1);
-        renderer.material = InventoryController.materials[Random.Range(1, 4)] as Material;
-        return instantiated;
-    }
+
 }
+

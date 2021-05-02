@@ -22,4 +22,4 @@ MonoBehaviour:
   rotationSpeed: 50
   zoomSpeed: 80
   zoomOutEdge: 60
-  zoomInEdge: 10
+  zoomInEdge: 3
