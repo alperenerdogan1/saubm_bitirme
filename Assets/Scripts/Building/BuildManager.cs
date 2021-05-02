@@ -7,7 +7,7 @@ public class BuildManager : MonoBehaviour
         var instantiated = Instantiate(prefab, buildPoint, Quaternion.identity);
         var renderer = instantiated.GetComponentInChildren<Renderer>();
         CustomUtility.ChangeAlpha(renderer.material, 1);
-        renderer.material = InventoryController.materials[Random.Range(1, 4)] as Material;
+        renderer.material = InventoryManager.materials[Random.Range(1, 4)] as Material;
         return instantiated;
     }
 }

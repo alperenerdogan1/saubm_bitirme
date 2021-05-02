@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using System.Linq;
 using System;
 
-public class InventoryController : MonoBehaviour
+public class InventoryManager : MonoBehaviour
 {
     public enum SelectableObjectType { BuildObject, FloorTile, Wall };
     public enum SelectionType { Nothing, Blueprint, Builded };

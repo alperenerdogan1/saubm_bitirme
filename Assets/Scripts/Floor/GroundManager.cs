@@ -26,7 +26,7 @@ public class GroundManager : MonoBehaviour
     // point where the ray shows for build objects
     public Vector3 buildPoint;
     [Header("References")]
-    public InventoryController inventoryController;
+    public InventoryManager inventoryManager;
     void Start()
     {
         // initializing ground game object
@@ -58,29 +58,29 @@ public class GroundManager : MonoBehaviour
     Vector3 GridMousePosition(RaycastHit hit)
     {
         Vector3 appliedPoint = hit.point;
-        if (hit.point.x + inventoryController.selectedItem.halfBoundSizeX >= groundObjectSize.x)
+        if (hit.point.x + inventoryManager.selectedItem.halfBoundSizeX >= groundObjectSize.x)
         {
-            appliedPoint.x = groundObjectSize.x - inventoryController.selectedItem.halfBoundSizeX;
+            appliedPoint.x = groundObjectSize.x - inventoryManager.selectedItem.halfBoundSizeX;
         }
-        if (hit.point.x - inventoryController.selectedItem.halfBoundSizeX < 0)
+        if (hit.point.x - inventoryManager.selectedItem.halfBoundSizeX < 0)
         {
-            appliedPoint.x = inventoryController.selectedItem.halfBoundSizeX;
+            appliedPoint.x = inventoryManager.selectedItem.halfBoundSizeX;
         }
-        if (hit.point.z + inventoryController.selectedItem.halfBoundSizeY >= groundObjectSize.z)
+        if (hit.point.z + inventoryManager.selectedItem.halfBoundSizeY >= groundObjectSize.z)
         {
-            appliedPoint.z = groundObjectSize.z - inventoryController.selectedItem.halfBoundSizeY;
+            appliedPoint.z = groundObjectSize.z - inventoryManager.selectedItem.halfBoundSizeY;
         }
-        if (hit.point.z - inventoryController.selectedItem.halfBoundSizeY < 0)
+        if (hit.point.z - inventoryManager.selectedItem.halfBoundSizeY < 0)
         {
-            appliedPoint.z = inventoryController.selectedItem.halfBoundSizeY;
+            appliedPoint.z = inventoryManager.selectedItem.halfBoundSizeY;
         }
         restrictedHitPoint = appliedPoint;
-        switch (inventoryController.gridSizeOptions)
+        switch (inventoryManager.gridSizeOptions)
         {
-            case InventoryController.GridSizeOptions.floorBased:
+            case InventoryManager.GridSizeOptions.floorBased:
                 appliedPoint = GetNearestPointOnGrid(appliedPoint, floorTileSize, floorTileSizeOffset);
                 break;
-            case InventoryController.GridSizeOptions.buildObjectBased:
+            case InventoryManager.GridSizeOptions.buildObjectBased:
                 appliedPoint = GetNearestPointOnGrid(appliedPoint, buildObjectSize);
                 break;
             default:
