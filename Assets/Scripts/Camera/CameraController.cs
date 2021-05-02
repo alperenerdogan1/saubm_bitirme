@@ -10,6 +10,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Transform positionTarget;
     [SerializeField] private Transform rotationTarget;
     private bool lockCameraFlow = false;
+    [SerializeField] private bool lockCameraManual = false;
     private float leftEdge, rightEdge, bottomEdge, upperEdge;
     void Start()
     {
@@ -30,7 +31,7 @@ public class CameraController : MonoBehaviour
         {
             if (!IsMouseOverUI())
                 ProcessCameraZoom();
-            ProcessCameraPosition();
+            if (!lockCameraManual) ProcessCameraPosition();
         }
     }
 
