@@ -519,7 +519,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 100, y: 100, z: 100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -793,7 +793,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1010472563}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 10, y: 1, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
@@ -845,14 +845,16 @@ MonoBehaviour:
   GroundObjectPrefab: {fileID: 2603376477120639075, guid: 5b53c77038ea53646b21d4274597dd9d,
     type: 3}
   groundObjectSize: {x: 10, y: 0.1, z: 10}
-  ShowBuildGizmo: 0
-  buildObjectSize: 0.2
+  buildObjectGizmosSize: {x: 1, y: 0, z: 1}
+  ShowBuildGizmo: 1
+  buildObjectSize: 0.05
+  buildObjectSizeOffset: {x: 0.05, y: 0, z: 0.05}
   buildObjectRayLayerMask:
     serializedVersion: 2
     m_Bits: 1335
-  ShowFloorGizmo: 1
-  floorTileSize: 2
-  floorTileSizeOffset: {x: 1, y: 0, z: 1}
+  ShowFloorGizmo: 0
+  floorTileSize: 1
+  floorTileSizeOffset: {x: 0.5, y: 0, z: 0.5}
   floorTileRayLayerMask:
     serializedVersion: 2
     m_Bits: 311
@@ -860,6 +862,7 @@ MonoBehaviour:
   boundSizeY: 0
   floorTilePoint: {x: 0, y: 0, z: 0}
   buildObjectPoint: {x: 0, y: 0, z: 0}
+  InventoryController: {fileID: 1425454868}
 --- !u!1 &1425454866
 GameObject:
   m_ObjectHideFlags: 0
@@ -903,7 +906,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f45d37e5c5a047499a6cbfd30e1f132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabs: []
+  multipleAllowed: 
+  selectables: []
   selectedText: {fileID: 996639732}
   buildObjectButton: {fileID: 6324235794051585883, guid: cfe0c00978a2537418ba28dba218b4d2,
     type: 3}
@@ -913,6 +917,7 @@ MonoBehaviour:
   blueprintModel: {fileID: 0}
   objectToBuilded: {fileID: 0}
   floorManager: {fileID: 1421708673}
+  gridSizeOptions: 0
 --- !u!1 &1485449014
 GameObject:
   m_ObjectHideFlags: 0
@@ -937,7 +942,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1485449014}
   m_LocalRotation: {x: 0.17880219, y: 0, z: 0, w: 0.9838851}
-  m_LocalPosition: {x: 9.2, y: 15, z: -31.9}
+  m_LocalPosition: {x: 5, y: 15, z: -32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 963194228}
