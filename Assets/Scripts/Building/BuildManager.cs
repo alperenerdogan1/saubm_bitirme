@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 
+
 public class BuildManager : MonoBehaviour
 {
-    public GameObject BuildObject(GameObject prefab, Vector3 buildPoint)
+    [SerializeField] InventoryManager inventoryManager;
+    public GameObject BuildObject(Selectable selectedItem, Vector3 buildPoint)
     {
-        var instantiated = Instantiate(prefab, buildPoint, Quaternion.identity);
-        var renderer = instantiated.GetComponentInChildren<Renderer>();
-        CustomUtility.ChangeAlpha(renderer.material, 1);
-        renderer.material = InventoryManager.materials[Random.Range(1, 4)] as Material;
+        var instantiated = Instantiate(selectedItem.GameObject, buildPoint, Quaternion.identity);
+        // var renderer = instantiated.GetComponentInChildren<Renderer>();
+        // if (selectedItem.type == SelectableObjectType.BuildObject) renderer.material = inventoryManager.materials[Random.Range(1, 4)] as Material;
         return instantiated;
     }
 }

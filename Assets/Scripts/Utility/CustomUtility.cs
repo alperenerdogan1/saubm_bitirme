@@ -7,6 +7,11 @@ public static class CustomUtility
         Color oldColor = material.color;
         material.color = new Color(oldColor.r, oldColor.g, oldColor.b, alphaVal);
     }
+    public static void MakeTransparent(Material material, float alphaVal)
+    {
+        Color oldColor = material.color;
+        material.color = new Color(oldColor.r, oldColor.g, oldColor.b, alphaVal);
+    }
     public static void ChangeLocalScale(GameObject gameObject, Vector3 appliedScale)
     {
         Vector3 tempScale = gameObject.transform.localScale;

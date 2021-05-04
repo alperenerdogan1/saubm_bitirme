@@ -7,6 +7,7 @@ public abstract class AbstractInputData : ScriptableObject
     [Header("Read Values")]
     [ReadOnlyInInspector] public bool LeftClick;
     [ReadOnlyInInspector] public bool RightClick;
+    [ReadOnlyInInspector] public bool KeyPressed;
     [ReadOnlyInInspector] public float Horizontal;
     [ReadOnlyInInspector] public float Vertical;
     public abstract void ProcessInput();

@@ -13,9 +13,18 @@ public class PlayerInputData : AbstractInputData
     [SerializeField] private string axisNameVertical;
     [Header("Key Base Control")]
     [SerializeField] private bool keyBaseActive;
+    //
+    [SerializeField] private bool keyBaseSingleActive;
+    [SerializeField] private KeyCode singleKeyCode;
+    //
+    [SerializeField] private bool keyBaseSinglePressAxisActive;
+    [SerializeField] private KeyCode singlePressPositive;
+    [SerializeField] private KeyCode singlePressNegative;
+    //
     [SerializeField] private bool keyBaseHorizontalActive;
     [SerializeField] private KeyCode positiveHorizontalKeyCode;
     [SerializeField] private KeyCode negativeHorizontalKeyCode;
+    //
     [SerializeField] private bool keyBaseVerticalActive;
     [SerializeField] private KeyCode positiveVerticalKeyCode;
     [SerializeField] private KeyCode negativeVerticalKeyCode;
@@ -51,11 +60,19 @@ public class PlayerInputData : AbstractInputData
             {
                 KeyBaseAxisControl(ref Vertical, positiveVerticalKeyCode, negativeHorizontalKeyCode);
             }
+            if (keyBaseSingleActive)
+            {
+                SingleKeyPressed(ref KeyPressed, singleKeyCode);
+            }
+            if (keyBaseSinglePressAxisActive)
+            {
+                KeyBaseAxisControlSinglePress(ref Horizontal, singlePressPositive, singlePressNegative);
+            }
         }
         else if (mouseButtonsActive)
         {
-            LeftClick = Input.GetMouseButton(leftClickButton);
-            RightClick = Input.GetMouseButton(rightClickButton);
+            LeftClick = Input.GetMouseButtonDown(leftClickButton);
+            RightClick = Input.GetMouseButtonDown(rightClickButton);
         }
     }
     private void KeyBaseAxisControl(ref float value, KeyCode positive, KeyCode negative)
@@ -73,6 +90,35 @@ public class PlayerInputData : AbstractInputData
         else
         {
             value = 0;
+        }
+    }
+    private void KeyBaseAxisControlSinglePress(ref float value, KeyCode positive, KeyCode negative)
+    {
+        bool positiveActive = Input.GetKeyDown(positive);
+        bool negativeActive = Input.GetKeyDown(negative);
+        if (positiveActive)
+        {
+            value = 1;
+        }
+        else if (negativeActive)
+        {
+            value = -1;
+        }
+        else
+        {
+            value = 0;
+        }
+    }
+    private void SingleKeyPressed(ref bool keyPressed, KeyCode single)
+    {
+        bool keyActive = Input.GetKeyDown(single);
+        if (keyActive)
+        {
+            keyPressed = true;
+        }
+        else
+        {
+            keyPressed = false;
         }
     }
 }

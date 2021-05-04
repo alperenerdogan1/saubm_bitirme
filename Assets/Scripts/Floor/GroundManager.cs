@@ -7,22 +7,26 @@ public class GroundManager : MonoBehaviour
     [Header("Ground Object Settings")]
     [SerializeField] private GameObject GroundObjectPrefab;
     public Vector3 groundObjectSize;
+    public float groundObjectHeight;
     [Header("Build Objects Settings")]
     public Vector3 buildObjectGizmosSize;
     [SerializeField] private bool ShowBuildGizmo = false;
     [Range(.05f, 3)]
     [SerializeField] private float buildObjectSize;
     [SerializeField] private Vector3 buildObjectSizeOffset;
-    [SerializeField] private LayerMask buildObjectRayLayerMask;
+    [SerializeField] private LayerMask buildObjectRayLayerMask; //<-LAYERS BE IGNORED
     [Header("Floor Objects Settings")]
     [SerializeField] private bool ShowFloorGizmo = false;
     [Range(1, 3)]
     [SerializeField] private float floorTileSize;
     [SerializeField] private Vector3 floorTileSizeOffset;
     [SerializeField] private LayerMask floorTileRayLayerMask;
+    [Header("Wall")]
+    [SerializeField] private bool ShowWallGizmo = false;
+    [Range(.1f, 3)]
+    [SerializeField] private float wallTileSize;
+    [SerializeField] private Vector3 wallTileSizeOffset;
     [Header("Other")]
-    // point where the ray shows for floor tile
-    public Vector3 floorTilePoint;
     // point where the ray shows for build objects
     public Vector3 buildPoint;
     [Header("References")]
@@ -30,7 +34,8 @@ public class GroundManager : MonoBehaviour
     void Start()
     {
         // initializing ground game object
-        GameObject groundGameObject = Instantiate(GroundObjectPrefab, new Vector3(groundObjectSize.x / 2, -0.05f, groundObjectSize.z / 2),
+        GameObject groundGameObject = Instantiate(GroundObjectPrefab,
+        new Vector3(groundObjectSize.x / 2, groundObjectHeight, groundObjectSize.z / 2),
          Quaternion.identity, this.transform);
         CustomUtility.ChangeLocalScale(groundGameObject, groundObjectSize);
         groundGameObject.layer = MasterManager.Instance.GameSettings.GroundLayer;
@@ -77,11 +82,14 @@ public class GroundManager : MonoBehaviour
         restrictedHitPoint = appliedPoint;
         switch (inventoryManager.gridSizeOptions)
         {
-            case InventoryManager.GridSizeOptions.floorBased:
+            case GridSizeOptions.floorBased:
                 appliedPoint = GetNearestPointOnGrid(appliedPoint, floorTileSize, floorTileSizeOffset);
                 break;
-            case InventoryManager.GridSizeOptions.buildObjectBased:
+            case GridSizeOptions.buildObjectBased:
                 appliedPoint = GetNearestPointOnGrid(appliedPoint, buildObjectSize);
+                break;
+            case GridSizeOptions.wallBased:
+                appliedPoint = GetNearestPointOnGrid(appliedPoint, wallTileSize, Vector3.zero);
                 break;
             default:
                 break;
@@ -142,7 +150,17 @@ public class GroundManager : MonoBehaviour
                 }
             }
         }
+        if (ShowWallGizmo)
+        {
+            for (float x = 0; x < groundObjectSize.z; x += wallTileSize)
+            {
+                for (float z = 0; z < groundObjectSize.x; z += wallTileSize)
+                {
+                    Vector3 point = GetNearestPointOnGrid(new Vector3(x, 0f, z), wallTileSize, wallTileSizeOffset, showLogs: false);
+                    Gizmos.DrawSphere(point, 0.05f);
+                }
+            }
+        }
     }
-
 }
 

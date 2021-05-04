@@ -274,6 +274,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: af0d457a4f9019446b77085bd28f8eca, type: 2}
   - {fileID: 11400000, guid: c0b0e41f54c29334fab5a01440ba2877, type: 2}
   - {fileID: 11400000, guid: 0252645ecc9f26346986555d1dbc65db, type: 2}
+  - {fileID: 11400000, guid: a3388012af8e4cc4baee490f07a08658, type: 2}
+  - {fileID: 11400000, guid: 648204affd34af14e88663dfb6b28d21, type: 2}
+  - {fileID: 11400000, guid: 7535607d454eb024cbd2f343951507ec, type: 2}
 --- !u!4 &139047499
 Transform:
   m_ObjectHideFlags: 0
@@ -426,7 +429,7 @@ RectTransform:
   - {fileID: 996639731}
   - {fileID: 57849759}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -523,7 +526,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &963194225
 GameObject:
@@ -537,6 +540,7 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -627,6 +631,38 @@ MonoBehaviour:
   zoomInputData: {fileID: 11400000, guid: 0252645ecc9f26346986555d1dbc65db, type: 2}
   positionTarget: {fileID: 1485449015}
   rotationTarget: {fileID: 1485449015}
+  lockCameraManual: 1
+--- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1 &996639730
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,7 +792,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f58cf65ea995c4b45be95713bdea8134, type: 2}
+  - {fileID: 2100000, guid: ed5ecc37fd4f11b4eae5f9d04420c8e8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -797,7 +833,7 @@ Transform:
   m_LocalScale: {x: 10, y: 1, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1421708673
 GameObject:
@@ -844,9 +880,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GroundObjectPrefab: {fileID: 2603376477120639075, guid: 5b53c77038ea53646b21d4274597dd9d,
     type: 3}
-  groundObjectSize: {x: 10, y: 0.1, z: 10}
+  groundObjectSize: {x: 10, y: 0.01, z: 10}
+  groundObjectHeight: 0
   buildObjectGizmosSize: {x: 1, y: 0, z: 1}
-  ShowBuildGizmo: 1
+  ShowBuildGizmo: 0
   buildObjectSize: 0.05
   buildObjectSizeOffset: {x: 0.05, y: 0, z: 0.05}
   buildObjectRayLayerMask:
@@ -858,7 +895,9 @@ MonoBehaviour:
   floorTileRayLayerMask:
     serializedVersion: 2
     m_Bits: 311
-  floorTilePoint: {x: 0, y: 0, z: 0}
+  ShowWallGizmo: 0
+  wallTileSize: 0.25
+  wallTileSizeOffset: {x: 0, y: 0, z: 0}
   buildPoint: {x: 0, y: 0, z: 0}
   inventoryManager: {fileID: 1425454868}
   restrictedHitPoint: {x: 0, y: 0, z: 0}
@@ -906,12 +945,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectables: []
-  selectedText: {fileID: 996639732}
-  buildObjectButton: {fileID: 6324235794051585883, guid: cfe0c00978a2537418ba28dba218b4d2,
-    type: 3}
-  buildObjectButtonLayoutGorup: {fileID: 1821042303}
-  selectedObjectBoundSizeX: 0
-  selectedObjectBoundSizeY: 0
+  allowedTypesToMultiPlace: 01000000
+  materials: []
+  selectedObjectType: 0
+  currentSelectionType: 0
   blueprintModel: {fileID: 0}
   objectToBuilded: {fileID: 0}
   gridSizeOptions: 0
@@ -920,9 +957,10 @@ MonoBehaviour:
     name: 
     halfBoundSizeX: 0
     halfBoundSizeY: 0
-    materialId: 0
     type: 0
     multiPlacingAllowed: 0
+    tag: 
+    layer: 0
   groundManager: {fileID: 1421708676}
   buildManager: {fileID: 1704027013}
   uIManager: {fileID: 1549661948}
@@ -935,6 +973,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1485449015}
+  - component: {fileID: 1485449016}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -949,14 +988,34 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1485449014}
-  m_LocalRotation: {x: 0.17880219, y: 0, z: 0, w: 0.9838851}
-  m_LocalPosition: {x: 5, y: 15, z: -32}
+  m_LocalRotation: {x: 0.17364816, y: 0, z: 0, w: 0.9848078}
+  m_LocalPosition: {x: 5, y: 10, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 963194228}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 20.6, y: 0, z: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 20, y: 0, z: 0}
+--- !u!114 &1485449016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485449014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 553a247c0c7eed042beb983ce074c4da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildObjectInput: {fileID: 11400000, guid: a3388012af8e4cc4baee490f07a08658, type: 2}
+  blueprintRotateInput: {fileID: 11400000, guid: 7535607d454eb024cbd2f343951507ec,
+    type: 2}
+  cancelBlueprintInput: {fileID: 11400000, guid: 648204affd34af14e88663dfb6b28d21,
+    type: 2}
+  inventoryManager: {fileID: 1425454868}
+  groundManager: {fileID: 1421708676}
+  buildManager: {fileID: 1704027013}
 --- !u!1 &1504728625
 GameObject:
   m_ObjectHideFlags: 0
@@ -985,7 +1044,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1549661947
 GameObject:
@@ -1017,6 +1076,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedObjectNameText: {fileID: 996639732}
+  buildObjectButton: {fileID: 6324235794051585883, guid: cfe0c00978a2537418ba28dba218b4d2,
+    type: 3}
+  buildObjectButtonLayoutGorup: {fileID: 1821042303}
+  inventoryManager: {fileID: 1425454868}
 --- !u!4 &1549661949
 Transform:
   m_ObjectHideFlags: 0
@@ -1095,7 +1158,37 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1569353318
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1569353319}
+  m_Layer: 0
+  m_Name: SaveDataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1569353319
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569353318}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1704027012
 GameObject:
@@ -1126,6 +1219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09466776d17be7648805c62d1dc5a6c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryManager: {fileID: 1425454868}
 --- !u!4 &1704027014
 Transform:
   m_ObjectHideFlags: 0
@@ -1152,7 +1246,7 @@ GameObject:
   - component: {fileID: 1821042303}
   - component: {fileID: 1821042302}
   m_Layer: 5
-  m_Name: ScrollContent
+  m_Name: BuildObjectButtonLayoutGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

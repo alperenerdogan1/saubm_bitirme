@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7160aa42f4215ea4aaa85395c5046e07, type: 3}
+  m_Name: RotateBlueprintInputData
+  m_EditorClassIdentifier: 
+  LeftClick: 0
+  RightClick: 0
+  KeyPressed: 0
+  Horizontal: 0
+  Vertical: 0
+  positionBaseActive: 0
+  axisBaseActive: 0
+  axisNameHorizontal: 
+  axisNameVertical: 
+  keyBaseActive: 1
+  keyBaseSingleActive: 0
+  singleKeyCode: 0
+  keyBaseSinglePressAxisActive: 1
+  singlePressPositive: 113
+  singlePressNegative: 101
+  keyBaseHorizontalActive: 0
+  positiveHorizontalKeyCode: 0
+  negativeHorizontalKeyCode: 0
+  keyBaseVerticalActive: 0
+  positiveVerticalKeyCode: 0
+  negativeVerticalKeyCode: 0
+  increaseAmount: 1
+  mouseButtonsActive: 0
+  leftClickButton: 0
+  rightClickButton: 0
