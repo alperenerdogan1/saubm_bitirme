@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         selectedObjectNameText.text = "Selected: Nothing";
+        SetupUI();
     }
     public void ChangeSelectedText(string selectedObjectName)
     {
@@ -20,12 +21,12 @@ public class UIManager : MonoBehaviour
     }
     public void SetupUI()
     {
-        foreach (var item in inventoryManager.selectables)
+        foreach (var item in GameManager.Instance.AllItems)
         {
             var button = Instantiate(buildObjectButton);
             button.transform.SetParent(buildObjectButtonLayoutGorup.transform);
-            button.GetComponentInChildren<Text>().text = item.name;
-            button.GetComponent<Button>().onClick.AddListener(() => inventoryManager.SelectBlueprint(item.PrefabId));
+            button.GetComponentInChildren<Text>().text = item.Name;
+            button.GetComponent<Button>().onClick.AddListener(() => inventoryManager.SelectBlueprint(item.Id));
         }
     }
 }

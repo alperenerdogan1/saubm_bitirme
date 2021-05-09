@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6df544f9b90639c438a59f7bfc5bd520, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  _gameVersion: 0.0.0
+  screenWidth: 1920
+  screenHeight: 1080
+  groundLayer: 8
+  groundTag: Ground

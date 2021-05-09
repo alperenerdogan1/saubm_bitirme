@@ -14,13 +14,15 @@ public class GroundManager : MonoBehaviour
     [Range(.05f, 3)]
     [SerializeField] private float buildObjectSize;
     [SerializeField] private Vector3 buildObjectSizeOffset;
-    [SerializeField] private LayerMask buildObjectRayLayerMask; //<-LAYERS BE IGNORED
+    [SerializeField] private LayerMask IdleMask; //<-LAYERS BE IGNORED
     [Header("Floor Objects Settings")]
     [SerializeField] private bool ShowFloorGizmo = false;
     [Range(1, 3)]
     [SerializeField] private float floorTileSize;
     [SerializeField] private Vector3 floorTileSizeOffset;
-    [SerializeField] private LayerMask floorTileRayLayerMask;
+    [SerializeField] private LayerMask FloorRayLayerMask; //<-LAYERS BE IGNORED
+    [SerializeField] private LayerMask BlueprintLayerMask; //<-LAYERS BE IGNORED
+
     [Header("Wall")]
     [SerializeField] private bool ShowWallGizmo = false;
     [Range(.1f, 3)]
@@ -29,6 +31,7 @@ public class GroundManager : MonoBehaviour
     [Header("Other")]
     // point where the ray shows for build objects
     public Vector3 buildPoint;
+    public BuildingController PointingBuildingController;
     [Header("References")]
     public InventoryManager inventoryManager;
     void Start()
@@ -44,59 +47,67 @@ public class GroundManager : MonoBehaviour
     void Update()
     {
         RaycastHit hit;
-        if (CheckRayTag(buildObjectRayLayerMask, "Ground", out hit))
-        {
-            var hitpoint = GridMousePosition(hit);
-        }
-    }
-    bool CheckRayTag(LayerMask mask, string tag, out RaycastHit hit)
-    {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Debug.DrawRay(ray.origin, ray.direction * 9999, Color.red);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, BlueprintLayerMask))
         {
-            if (hit.collider.tag == tag) return true;
+            if (hit.collider.tag == "Ground" || hit.collider.tag == "Plane")
+            {
+                var hitpoint = GridMousePosition(hit);
+                GameManager.Instance.CurrentRayingObjectType = RayingObjectType.Ground;
+            }
         }
-        return false;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, IdleMask))
+        {
+            if (hit.collider.tag == "BuildedObject")
+            {
+                PointingBuildingController = hit.collider.gameObject.GetComponent<BuildingController>();
+                GameManager.Instance.CurrentRayingObjectType = RayingObjectType.BuildedObject;
+            }
+        }
     }
     public Vector3 restrictedHitPoint;
     Vector3 GridMousePosition(RaycastHit hit)
     {
         Vector3 appliedPoint = hit.point;
-        if (hit.point.x + inventoryManager.selectedItem.halfBoundSizeX >= groundObjectSize.x)
+        if (!(inventoryManager.currentSelectionType == SelectionType.Nothing))
         {
-            appliedPoint.x = groundObjectSize.x - inventoryManager.selectedItem.halfBoundSizeX;
-        }
-        if (hit.point.x - inventoryManager.selectedItem.halfBoundSizeX < 0)
-        {
-            appliedPoint.x = inventoryManager.selectedItem.halfBoundSizeX;
-        }
-        if (hit.point.z + inventoryManager.selectedItem.halfBoundSizeY >= groundObjectSize.z)
-        {
-            appliedPoint.z = groundObjectSize.z - inventoryManager.selectedItem.halfBoundSizeY;
-        }
-        if (hit.point.z - inventoryManager.selectedItem.halfBoundSizeY < 0)
-        {
-            appliedPoint.z = inventoryManager.selectedItem.halfBoundSizeY;
+            if (hit.point.x + inventoryManager.blueprint.halfBoundSizeX >= groundObjectSize.x)
+            {
+                appliedPoint.x = groundObjectSize.x - inventoryManager.blueprint.halfBoundSizeX;
+            }
+            if (hit.point.x - inventoryManager.blueprint.halfBoundSizeX < 0)
+            {
+                appliedPoint.x = inventoryManager.blueprint.halfBoundSizeX;
+            }
+            if (hit.point.z + inventoryManager.blueprint.halfBoundSizeY >= groundObjectSize.z)
+            {
+                appliedPoint.z = groundObjectSize.z - inventoryManager.blueprint.halfBoundSizeY;
+            }
+            if (hit.point.z - inventoryManager.blueprint.halfBoundSizeY < 0)
+            {
+                appliedPoint.z = inventoryManager.blueprint.halfBoundSizeY;
+            }
         }
         restrictedHitPoint = appliedPoint;
         switch (inventoryManager.gridSizeOptions)
         {
             case GridSizeOptions.floorBased:
                 appliedPoint = GetNearestPointOnGrid(appliedPoint, floorTileSize, floorTileSizeOffset);
+                appliedPoint.y = groundObjectSize.y / 2 + .0001f;
                 break;
             case GridSizeOptions.buildObjectBased:
                 appliedPoint = GetNearestPointOnGrid(appliedPoint, buildObjectSize);
+                appliedPoint.y = groundObjectSize.y / 2;
                 break;
             case GridSizeOptions.wallBased:
                 appliedPoint = GetNearestPointOnGrid(appliedPoint, wallTileSize, Vector3.zero);
+                appliedPoint.y = groundObjectSize.y / 2;
                 break;
             default:
                 break;
         }
-        appliedPoint.y = groundObjectSize.y / 2 + .0001f;
         buildPoint = appliedPoint;
-
         return appliedPoint;
     }
     public Vector3 GetNearestPointOnGrid(Vector3 position, float size, bool showLogs = true)

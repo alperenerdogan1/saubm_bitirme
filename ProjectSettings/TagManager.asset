@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - GridBlock
-  - BuildObject
+  - Plane
+  - BuildedObject
   - Ground
   - Blueprint
   layers:
@@ -19,7 +19,7 @@ TagManager:
   - 
   - Ground
   - Blueprint
-  - BuildObject
+  - BuildedObject
   - 
   - 
   - 

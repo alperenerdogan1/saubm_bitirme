@@ -10,6 +10,8 @@ public class ScriptableGameSettings : AbstractScriptableObject
     [Header("Layers")]
     [SerializeField] private int groundLayer;
     public int GroundLayer { get { return groundLayer; } }
+    [SerializeField] private string groundTag;
+    public string GroundTag { get { return groundTag; } }
 
     public override void Initialize()
     {

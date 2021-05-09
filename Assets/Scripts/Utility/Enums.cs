@@ -3,67 +3,92 @@ using UnityEngine;
 
 public enum SelectableObjectType { BuildObject, FloorTile, Wall };
 public enum SelectionType { Nothing, Blueprint, Builded };
+public enum RayingObjectType { BuildedObject, Ground };
 public enum GridSizeOptions { buildObjectBased, floorBased, wallBased };
 [Serializable]
 public class Selectable
 {
-    private static int Index = 0;
-    public Selectable()
+    public int Id;
+    public string Name;
+    private GameObject gameObject;
+    public GameObject GameObject
     {
-        PrefabId = Index;
+        get { return gameObject; }
+        set { gameObject = value; string[] seperated = value.name.Split('_'); Name = seperated[0]; Int32.TryParse(seperated[1], out Id); }
     }
-    public int localIndex;
-    public string name;
-    private int prefabId;
-    public int PrefabId
+    public SelectableObjectType Type;
+    public bool MultiPlacingAllowed = false;
+}
+public class Blueprint
+{
+    public int Id;
+    public string Name;
+    private GameObject gameObject;
+    public GameObject GameObject
     {
-        get
-        {
-            return prefabId;
-        }
-        set
-        {
-            prefabId = value;
-            Index++;
-        }
+        get { return gameObject; }
+        set { gameObject = value; Renderer = gameObject.GetComponent<Renderer>(); gameObject.tag = "Blueprint"; }
+    }
+    public float HalfBoundSizeX;
+    public float HalfBoundSizeY;
+    private Renderer renderer;
+    public Renderer Renderer
+    {
+        get { return renderer; }
+        set { renderer = value; HalfBoundSizeX = renderer.bounds.size.x / 2; HalfBoundSizeY = renderer.bounds.size.z / 2; }
+    }
+    public SelectableObjectType Type;
+    public void ChangeTransform(Vector3 point)
+    {
+        this.gameObject.transform.position = point;
+    }
+    public void RotateBlueprint(float axis)
+    {
+        this.gameObject.transform.Rotate(0, axis, 0);
+        float temp = HalfBoundSizeX;
+        HalfBoundSizeX = HalfBoundSizeY;
+        HalfBoundSizeY = temp;
+    }
+}
+public class Buildable
+{
+    public int Id;
+    public string Name;
+    private GameObject gameObject;
+    public GameObject GameObject
+    {
+        get { return gameObject; }
+        set { gameObject = value; Renderer = gameObject.GetComponent<Renderer>(); }
     }
     private Renderer renderer;
     public Renderer Renderer
     {
         get { return renderer; }
-        set { renderer = value; halfBoundSizeX = value.bounds.size.x / 2; halfBoundSizeY = value.bounds.size.z / 2; }
+        set { renderer = value; halfBoundSizeX = renderer.bounds.size.x / 2; halfBoundSizeY = renderer.bounds.size.z / 2; }
     }
-    public float halfBoundSizeX;
-    public float halfBoundSizeY;
-    private GameObject gameObject;
-    public GameObject GameObject
-    {
-        get { return gameObject; }
-        set { gameObject = value; name = value.name; }
-    }
-    public SelectableObjectType type;
-    public bool multiPlacingAllowed = false;
-    public string tag;
-    public int layer;
-}
-class Buildable
-{
-    GameObject GameObject;
     public SelectableObjectType selectableObjectType;
     public float halfBoundSizeX;
     public float halfBoundSizeY;
-    public string tag;
-    public int layer;
-    public Buildable()
+    public void ChangeTransform(Vector3 point)
     {
-
+        this.gameObject.transform.position = point;
     }
-    public void ChangeTransform()
+    public void RotateBlueprint(float axis)
     {
-
+        this.gameObject.transform.Rotate(0, axis, 0);
+        float temp = halfBoundSizeX;
+        halfBoundSizeX = halfBoundSizeY;
+        halfBoundSizeY = temp;
     }
-    public void Rotate()
-    {
+}
 
-    }
+[System.Serializable]
+public class SavedObjectData
+{
+    public float[] position = new float[3];
+    public float[] rotation = new float[4];
+    public float[] scale = new float[3];
+    public string name;
+    public int id;
+
 }
